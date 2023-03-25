@@ -28,12 +28,12 @@ Uma das maiores plataformas de serviços de computação em nuvem chegou na DIO.
 
 
 - 
-  ## Desafios:
+  ## Descrição do desafio:
 
 
 ```
 1. Criar um arquivo YML com uma Infraestrutura como Código (IaC) em uma abordagem totalmente utilizando o Serverless Framework e DynamoDB. 
 ```
 
-
+![](C:\Dio\bootcamp-cloud-aws\project-dio-serverless\src\Estrutura.png)
 
