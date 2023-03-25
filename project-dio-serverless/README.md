@@ -32,8 +32,8 @@ Uma das maiores plataformas de serviços de computação em nuvem chegou na DIO.
 
 
 ```
-1. Criar um arquivo YML com uma Infraestrutura como Código (IaC) em uma abordagem totalmente utilizando o Serverless Framework e DynamoDB. 
+1. Criar um arquivo YML com uma Infraestrutura como Código (IaC), utilizando o Serverless Framework, AWS CloudFormation, Funções do AWS Lambda e AWS DynamoDB. 
 ```
 
-![](C:\Dio\bootcamp-cloud-aws\project-dio-serverless\src\Estrutura.png)
+![](src\Estrutura.png)
 
