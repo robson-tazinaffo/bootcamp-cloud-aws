@@ -34,19 +34,19 @@ functions:
   fetchProducts:
     handler: src/fetchProducts.handler
     events:
-      - httpApi:
+      - http:
           path: /products
           method: get
   fetchProduct:
     handler: src/fetchProduct.handler
     events:
-      - httpApi:
+      - http:
           path: /products/{id}
           method: get
   updateProduct:
     handler: src/updateProduct.handler
     events:
-      - httpApi:
+      - http:
           path: /products/{id}
           method: put
 

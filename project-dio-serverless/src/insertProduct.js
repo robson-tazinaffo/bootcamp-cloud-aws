@@ -4,7 +4,7 @@ const { v4 } = require('uuid')
 const AWS = require('aws-sdk')
 
 const insertProduct = async event => {
-    const { description, status, price } = JSON.parse(event.body)
+    const { description, product_status, price } = JSON.parse(event.body)
     const createDate = new Date().toISOString()
     const id = v4()
 
@@ -17,7 +17,7 @@ const insertProduct = async event => {
         id,
         description,
         createDate,
-        status,
+        product_status: false,
         price
     }
 
