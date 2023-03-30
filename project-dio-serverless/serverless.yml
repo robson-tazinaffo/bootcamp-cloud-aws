@@ -16,7 +16,7 @@ provider:
                 - dynamodb:GetItem
                 - dynamodb:Scan
               Resource:
-                - arn:aws:dynamodb:us-east-1:445854071399:table/products
+                - arn:aws:dynamodb:us-east-1:123456789:table/products
 
 functions:
   hello:
