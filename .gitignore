@@ -1,3 +1,4 @@
+.gitignore
 # projeto cognito
 /api-rest-cognito/node_modules
 /api-rest-cognito/.serverless
