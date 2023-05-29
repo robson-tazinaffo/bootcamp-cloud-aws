@@ -1,2 +1,8 @@
-node_modules
-.serverless
+# projeto cognito
+/api-rest-cognito/node_modules
+/api-rest-cognito/.serverless
+
+# projeto serverless
+/project-dio-serverless/node_modules
+/project-dio-serverless/.serverless
+

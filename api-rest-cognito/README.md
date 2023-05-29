@@ -10,6 +10,10 @@
 
 [Download do git](https://git-scm.com/downloads)
 
+[Postman](https://www.postman.com/downloads/)
+
+[Nodejs](https://nodejs.org/en/download)
+
 
 
 ## Tecnologias utilizadas no projeto
@@ -27,7 +31,14 @@
 
 - ## Descrição do desafio:
 
-Criar um arquivo YML com uma Infraestrutura como Código (IaC), utilizando o Serverless Framework, AWS CloudFormation, Funções do AWS Lambda e AWS DynamoDB. 
+Aplicação de autenticação, autorização e gerenciamento de usuários para aplicações Web e Mobile com o Amazon **Cognito**.. Esse serviço, totalmente gerenciado pela AWS, suporta os principais mecanismos de segurança do mercado, além da integração com terceiros, como Facebook, Google, Apple ou a própria Amazon.
 
-![](/src/Estrutura.png)
+As seguintes tarefas serão realizadas:
 
+- **Utilizar os serviços Amazon Cognito, DynamoDB, API Gateway e AWS Lambda;**
+- **Criar uma API REST no Amazon API Gateway;**
+- **Criar tabela no Amazon DynamoDB;**
+- **Criar funções no AWS Lambda;**
+- **Integrar o API Gateway com o Lambda backend;**
+- **Utilizar a ferramenta no POSTMAN;**
+- **Criar um autorizador do Amazon Cognito para uma API REST no Amazon API Gateway.**
