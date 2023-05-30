@@ -16,7 +16,7 @@ provider:
                 - dynamodb:GetItem
                 - dynamodb:Scan
               Resource:
-                - arn:aws:dynamodb:us-east-1:751458874244:table/product
+                - arn:aws:dynamodb:us-east-1:751458874244:table/products
 
 functions:
   hello:
@@ -41,13 +41,13 @@ functions:
     handler: src/fetchProduct.handler
     events:
       - http:
-          path: /products/{id}
+          path: /product/{id}
           method: get
   updateProduct:
     handler: src/updateProduct.handler
     events:
       - http:
-          path: /products/{id}
+          path: /product/{id}
           method: put
 
 

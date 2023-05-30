@@ -1,4 +1,4 @@
-# Roteiro para o desenvolvimento
+# Confiuração do Projeto no Console AWS
 
 
 
@@ -9,9 +9,14 @@
 ![](images\Estrutura.png)
 
 - Amazon Cognito
+
 - Amazon DynamoDB
+
 - Amazon API Gateway
+
 - AWS Lambda
+
+  
 
 ## Etapas do desenvolvimento
 
@@ -25,19 +30,23 @@
 
 
 
-### No Amazon DynamoDB
+### Criando uma tabela no banco de dados Amazon DynamoDB
 
 - DynamoDB Dashboard -> Tables -> Create table -> Table name [Items] -> Partition key [id] -> Create table
 
 
 
+
+
 ### No AWS Lambda
+
+
 
 #### Função para inserir item
 
-- Lambda Dashboard -> Create function -> Name [put_item_function] -> Create function
+- Lambda Dashboard -> Create function -> Name [insertProducts] -> Create function
 
-- Inserir código da função ```put_item_function.js``` disponível na pasta ```/src``` -> Deploy
+- Inserir código da função ```insertProducts.js``` disponível na pasta ```/src``` -> Deploy
 
 - Configuration -> Execution role -> Abrir a Role no console do IAM
 
@@ -76,33 +85,11 @@
 
 
 
-![](images\postman-api.png)
-
-
-
-### No Amazon Cognito
-
-- Cognito Dashboard -> Manage User Pools -> Create a User Pool -> Pool name [TestPool]
-- How do you want your end users to sign in? - Email address or phone number -> Next Step
-- What password strength do you want to require?
-- Do you want to enable Multi-Factor Authentication (MFA)? Off -> Next Step
-- Do you want to customize your email verification messages? -> Verification type - Link -> Next Step
-- Which app clients will have access to this user pool? -> App client name [TestClient] -> Create App Client -> Next Step
-- Create Pool
-
-- App integration -> App client settings -> Enabled Identity Providers - Cognito User Pool
-- Callback URL(s) [https://example.com/logout]
-- OAuth 2.0 -> Allowed OAuth Flows - Authorization code grant -Implicit grant
-- Allowed OAuth Scopes	- email	- openid
-- Save Changes
-
-- Domain name -> Domain prefix [diolive] -> Save
-
-
+### No Amazon Cognito - Criando User Pool
 
 ##### Siga os passos abaixo:
 
-- Acesse o Cognito pela barra de pesquisa ou Marketplace.
+- Acesse o Amazon Cognito pela barra de pesquisa ou Marketplace.
 - Clique no botão "criar grupo de usuários".
 - Na nova página, dentro da seção "Provedores de autenticação" e abaixo do sub-título "Tipos de provedor" selecione "Grupo de usuários do Cognito"
 - Marque o checkbox "e-mail" nas opções de login do grupo de usuários Cognito
@@ -121,8 +108,6 @@
 
 
 
-
-
 ### Criando um autorizador do Amazon Cognito para uma API REST no Amazon API Gateway
 
 - API Gateway Dashboard -> Selecionar a API criada -> Authorizers -> Create New Authorizer
@@ -131,49 +116,36 @@
 
 
 
-Segui o vídeo abaixo e acrescentei apenas :
+### No Postman
+
+- Add request -> Authorization
+- Type - OAuth 2.0
+- Callback URL [https://example.com/logout]
+- **Auth URL**: https://xxx.auth.us-east-1.amazoncognito.com/oauth2/authorize
+- ##### Access Token URL: https://xxx.auth.us-east-1.amazoncognito.com/oauth2/token
+
+- Client ID - obter o Client ID do Cognito em App clients
+- Scope [email - openid]
+- Client Authentication [Send client credentials in body]
+- Get New Access Token
+- Copiar o token gerado
+
+- Selecionar a request para inserir item criada -> Authorization -> Type - Bearer Token -> Inserir o token copiado
+- Send
+
+
+
+Segui a documentação abaixo e acrescentei apenas :
 
 /oauth2/authorize  e /oauth2/token no final  das URL's
 
-
-
-##### Auth URL: https://xxx.auth.us-east-1.amazoncognito.com/oauth2/authorize
-
-#####  
-
-##### Access Token URL: https://xxx.auth.us-east-1.amazoncognito.com/oauth2/token
-
-
-
 Onde xxx é sua url
 
- 
-
-Segue link do vídeo e documentação que utilizei como base logo abaixo:
-
- 
-
-https://www.youtube.com/watch?v=8YqCKqnqpDs
 
 
+Segue link da documentação que utilizei como base logo abaixo:
 
 https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-userpools-server-contract-reference.html
 
 
 
-
-
-### No POSTMAN
-
-- Add request -> Authorization
-- Type - OAuth 2.0
-- Callback URL [https://example.com/logout]
-- Auth URL [https://diolive.auth.sa-east-1.amazoncognito.com/login]
-- Client ID - obter o Client ID do Cognito em App clients
-- Scope [email - openid]
-- Client Authentication [Send client credentials in body]
-- Get New Acces Token
-- Copiar o token gerado
-
-- Selecionar a request para inserir item criada -> Authorization -> Type - Bearer Token -> Inserir o token copiado
-- Send

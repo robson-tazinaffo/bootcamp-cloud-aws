@@ -60,7 +60,7 @@ resources:
     ItemTable:
       Type: AWS::DynamoDB::Table
       Properties:
-          TableName: ItemTable
+          TableName: products
           BillingMode: PAY_PER_REQUEST
           AttributeDefinitions:
             - AttributeName: id

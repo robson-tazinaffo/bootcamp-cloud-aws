@@ -47,14 +47,14 @@ $ serverless
 Login/Register: No
 Update: No
 Type: Node.js REST API
-Name: dio-live
+Name: app-cognito-dio
 ```
 ```
-$ cd dio-live
+$ cd app-cognito-dio
 $ code .
 ```
 - No arquivo ```serverless.yml``` adicionar a região ```region: us-east-1``` dentro do escopo de ```provider:```
-- Salvar e realizar o deploy ```$ serverless deploy -v```
+- Salvar e realizar o deploy ```$ serverless deploy```
 
 #### Estruturar o código
 
@@ -82,7 +82,7 @@ resources:
     ItemTable:
       Type: AWS::DynamoDB::Table
       Properties:
-          TableName: ItemTable
+          TableName: products
           BillingMode: PAY_PER_REQUEST
           AttributeDefinitions:
             - AttributeName: id
@@ -109,7 +109,7 @@ resources:
                 - dynamodb:GetItem
                 - dynamodb:Scan
               Resource:
-                - arn:aws:dynamodb:us-east-1:167880115321:table/ItemTable
+                - arn:aws:dynamodb:us-east-1:1234567891011:table/products
   ```
 
    - Instalar dependências
@@ -120,36 +120,36 @@ resources:
   - Atualizar lista de funções no arquivo serverless.yml
   ```
   functions:
-  hello:
-    handler: src/hello.handler
-    events:
-      - http:
-          path: /
-          method: get
-  insertItem:
-    handler: src/insertItem.handler
-    events:
-      - http:
-          path: /item
-          method: post
-  fetchItems:
-    handler: src/fetchItems.handler
-    events:
-      - http:
-          path: /items
-          method: get
-  fetchItem:
-    handler: src/fetchItem.handler
-    events:
-      - http:
-          path: /items/{id}
-          method: get
-  updateItem:
-    handler: src/updateItem.handler
-    events:
-      - http:
-          path: /items/{id}
-          method: put
+    hello:
+      handler: src/handler.hello
+      events:
+        - http:
+            path: /
+            method: get
+    insertProduct:
+      handler: src/insertProduct.handler
+      events:
+        - http:
+            path: /product
+            method: post
+    fetchProducts:
+      handler: src/fetchProducts.handler
+      events:
+        - http:
+            path: /products
+            method: get
+    fetchProduct:
+      handler: src/fetchProduct.handler
+      events:
+        - http:
+            path: /product/{id}
+            method: get
+    updateProduct:
+      handler: src/updateProduct.handler
+      events:
+        - http:
+            path: /product/{id}
+            method: put
   ```
 
 
@@ -192,7 +192,8 @@ module.exports = {
 const AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
-exports.handler = async event => {
+const insertProduct = async (event) => {
+
     let responseBody = ''
     let statusCode = 0
 
@@ -224,6 +225,11 @@ exports.handler = async event => {
 
     return response
 }
+
+module.exports = {
+    handler:insertProduct
+}
+
 ```
 
 
@@ -236,11 +242,13 @@ exports.handler = async event => {
 var AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
+const updateProduct = async (event) => {
+
 exports.handler = async event => {
     let responseBody = ''
     let statusCode = 0
 
-    let { product_status } = JSON.parse(event.body)
+    let { description } = JSON.parse(event.body)
     let { price } = JSON.parse(event.body)
     const { id } = event.pathParameters
 
@@ -250,9 +258,9 @@ exports.handler = async event => {
                 TableName: 'products',
                 Key: { id },
                 UpdateExpression:
-                    'set product_status = :product_status, price = :price',
+                    'set description = :description, price = :price',
                 ExpressionAttributeValues: {
-                    ':product_status': product_status,
+                    ':description': description,
                     ':price': price
                 },
                 ReturnValues: 'ALL_NEW'
@@ -261,8 +269,9 @@ exports.handler = async event => {
         statusCode = 200
         responseBody = JSON.stringify('Produto atualizado com sucesso!')
     } catch (err) {
-        statusCode = 200
-        responseBody = JSON.stringify(err)
+        statusCode = 502;
+        responseBody = JSON.stringify(err);
+        console.log(err)
     }
 
     const response = {
@@ -272,6 +281,11 @@ exports.handler = async event => {
 
     return response
 }
+
+module.exports = {
+    handler:updateProduct;
+}
+
 ```
 
 
@@ -286,6 +300,8 @@ const fetchProducts = async event => {
     const dynamodb = new AWS.DynamoDB.DocumentClient()
 
     let description
+    let responseBody = ''
+    let statusCode = 0
 
     try {
         const results = await dynamodb
@@ -295,19 +311,25 @@ const fetchProducts = async event => {
             .promise()
 
         description = results.Items
+        statusCode = 200
     } catch (error) {
+        statusCode = 502
+        responseBody = JSON.stringify(description)
         console.log(error)
     }
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(description)
+    const response = {
+        statusCode: statusCode,
+        body: responseBody
     }
+
+    return response
 }
 
 module.exports = {
-    handler: fetchProducts
+    handler: fetchProducts;
 }
+
 ```
 
 
@@ -317,9 +339,11 @@ module.exports = {
 ```
 'use strict'
 const AWS = require('aws-sdk')
+const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 const fetchProduct = async event => {
-    const dynamodb = new AWS.DynamoDB.DocumentClient()
+    let responseBody = ''
+    let statusCode = 0
 
     const { id } = event.pathParameters
 
@@ -334,14 +358,20 @@ const fetchProduct = async event => {
             .promise()
 
         description = result.Item
+        statusCode = 200
+        responseBody = JSON.stringify(description)
     } catch (error) {
+        statusCode = 502
+        responseBody = JSON.stringify(error)
         console.log(error)
     }
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(description)
+    const response = {
+        statusCode: statusCode,
+        body: responseBody
     }
+
+    return response
 }
 
 module.exports = {
@@ -353,4 +383,4 @@ module.exports = {
 
 Fazer o deploy novamente:
 
-```$ serverless deploy -v ```
+```$ serverless deploy ```

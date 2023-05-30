@@ -1,11 +1,13 @@
-var AWS = require('aws-sdk')
+const AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+const updateProduct = async (event) => {
 
 exports.handler = async event => {
     let responseBody = ''
     let statusCode = 0
 
-    let { product_status } = JSON.parse(event.body)
+    let { description } = JSON.parse(event.body)
     let { price } = JSON.parse(event.body)
     const { id } = event.pathParameters
 
@@ -15,9 +17,9 @@ exports.handler = async event => {
                 TableName: 'products',
                 Key: { id },
                 UpdateExpression:
-                    'set product_status = :product_status, price = :price',
+                    'set description = :description, price = :price',
                 ExpressionAttributeValues: {
-                    ':product_status': product_status,
+                    ':description': description,
                     ':price': price
                 },
                 ReturnValues: 'ALL_NEW'
@@ -26,8 +28,9 @@ exports.handler = async event => {
         statusCode = 200
         responseBody = JSON.stringify('Produto atualizado com sucesso!')
     } catch (err) {
-        statusCode = 200
-        responseBody = JSON.stringify(err)
+        statusCode = 502;
+        responseBody = JSON.stringify(err);
+        console.log(err)
     }
 
     const response = {
@@ -36,4 +39,8 @@ exports.handler = async event => {
     }
 
     return response
+}
+
+module.exports = {
+    handler:updateProduct;
 }

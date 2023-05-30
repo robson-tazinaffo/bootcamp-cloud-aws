@@ -1,8 +1,10 @@
 'use strict'
 const AWS = require('aws-sdk')
+const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 const fetchProduct = async event => {
-    const dynamodb = new AWS.DynamoDB.DocumentClient()
+    let responseBody = ''
+    let statusCode = 0
 
     const { id } = event.pathParameters
 
@@ -17,14 +19,20 @@ const fetchProduct = async event => {
             .promise()
 
         description = result.Item
+        statusCode = 200
+        responseBody = JSON.stringify(description)
     } catch (error) {
+        statusCode = 502
+        responseBody = JSON.stringify(error)
         console.log(error)
     }
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(description)
+    const response = {
+        statusCode: statusCode,
+        body: responseBody
     }
+
+    return response
 }
 
 module.exports = {

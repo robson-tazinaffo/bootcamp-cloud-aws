@@ -1,7 +1,8 @@
 const AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
-exports.handler = async event => {
+const insertProduct = async (event) => {
+
     let responseBody = ''
     let statusCode = 0
 
@@ -32,4 +33,8 @@ exports.handler = async event => {
     }
 
     return response
+}
+
+module.exports = {
+    handler:insertProduct;
 }

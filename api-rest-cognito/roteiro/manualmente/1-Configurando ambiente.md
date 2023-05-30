@@ -85,7 +85,7 @@ resources:
                 - dynamodb:GetItem
                 - dynamodb:Scan
               Resource:
-                - arn:aws:dynamodb:us-east-1:167880115321:table/ItemTable
+                - arn:aws:dynamodb:us-east-1:12345678910:table/product
   ```
 
    - Instalar dependências
