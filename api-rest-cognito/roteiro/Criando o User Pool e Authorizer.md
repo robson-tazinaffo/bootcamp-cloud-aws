@@ -1,10 +1,6 @@
-# Criando o User Pool
+# Configurando o Amazon Cognito => User Pool
 
 
-
-![](images\Estrutura.png)
-
-### Configurando o Amazon Cognito => User Pool
 
 ##### Siga os passos abaixo:
 
